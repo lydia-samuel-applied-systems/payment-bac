@@ -1,36 +1,56 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
+using NServiceBus;
+using payment_bac.api.DataAccess;
+using payment_bac.api.DTO;
+using payment_bac.api.Handlers;
+using payment_bac.api.Utilities;
 
 namespace payment_bac.api.Controllers
 {
-    [Route("/bac-api/")]
+    [Microsoft.AspNetCore.Mvc.Route("api")]
     public class ApiController : Controller
     {
-        private readonly ILogger<ApiController> _logger;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IPaymentRaiser _paymentRaiser;
 
-        public ApiController(ILogger<ApiController> logger)
+        public ApiController(
+            ISessionHandler sessionHandler,
+            IPaymentRaiser paymentRaiser)
         {
-            _logger = logger;
+            _sessionHandler = sessionHandler;
+            _paymentRaiser = paymentRaiser;
         }
 
-        [HttpPost]
-        public void CreateSession()
-        {
-            // Todo: Learn how to generate a session and store session state in the DB
-            // return UI url
-        }
-
+        [Microsoft.AspNetCore.Mvc.Route("/StartSession")]
         [HttpGet]
-        public void GetSessionData()
+        public IActionResult StartSession()
         {
-            // Todo: Learn how to lookup session state and grab the policy from the DB
-            // UI should hit this and it should return the randomly generated policy
+            var sessionId = _sessionHandler.StartSession();
+  
+            // return Json structure with the URL and the session ID
+
+            throw new NotImplementedException();
         }
 
+        [Microsoft.AspNetCore.Mvc.Route("/LookupSessionData")]
         [HttpPost]
-        public void SubmitPaymentDetails()
+        public IActionResult LookupSessionData(string sessionId)
         {
-            // Todo: Learn how to raise an event that gets picked up by the Domain which starts a saga
-            // Do not persist the details here, instead raise an event which the domain should start a saga from
+            var policyInfo = _sessionHandler.GetSessionPolicy(sessionId);
+
+            // return Json structure with the policy data for the session
+
+            throw new NotImplementedException();
+        }
+
+        [Microsoft.AspNetCore.Mvc.Route("/SubmitPaymentDetails")]
+        [HttpPost]
+        public async Task SubmitPaymentDetails(string sessionId, PaymentDTO paymentDetails)
+        {
+            await _paymentRaiser.RaisePayment(sessionId, paymentDetails);
+
+            throw new NotImplementedException();
         }
     }
 }
