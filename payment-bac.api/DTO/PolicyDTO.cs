@@ -4,7 +4,7 @@ namespace payment_bac.api.DTO
 {
     public class PolicyDTO
     {
-
+        public int PolicyId { get; set; }
         public string PolicyName { get; set; }
         public string PolicyDescription { get; set; }
         public double PolicyTotal { get; set; }
@@ -13,6 +13,7 @@ namespace payment_bac.api.DTO
 
         public PolicyDTO(Policy policy)
         {
+            this.PolicyId = policy.ID;
             this.PolicyName = policy.PolicyName;
             this.PolicyDescription = policy.PolicyDescription;
             this.PolicyTotal = policy.PolicyTotal;

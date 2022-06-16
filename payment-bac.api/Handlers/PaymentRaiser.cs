@@ -6,7 +6,7 @@ namespace payment_bac.api.Handlers
 {
     public interface IPaymentRaiser
     {
-        public Task RaisePayment(string sessionId, PaymentDTO paymentDetails);
+        public Task RaisePayment(PaymentDTO paymentDetails);
     }
 
     public class PaymentRaiser : IPaymentRaiser
@@ -18,11 +18,11 @@ namespace payment_bac.api.Handlers
             _messageSession = messageSession;
         }
 
-        public async Task RaisePayment(string sessionId, PaymentDTO paymentDetails)
+        public async Task RaisePayment(PaymentDTO paymentDetails)
         {
             var paymentStartedEvent = new PaymentStarted()
             {
-                SessionId = sessionId,
+                SessionId = paymentDetails.SessionId,
                 PolicyId = paymentDetails.PolicyId,
                 AccountName = paymentDetails.AccountName,
                 AccountNumber = paymentDetails.AccountNumber,

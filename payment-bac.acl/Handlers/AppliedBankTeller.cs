@@ -5,9 +5,14 @@ namespace payment_bac.acl.Handlers
 {
     public class AppliedBankTeller : IHandleMessages<ProcessBankPayment>
     {
-        public Task Handle(ProcessBankPayment message, IMessageHandlerContext context)
+        public async Task Handle(ProcessBankPayment message, IMessageHandlerContext context)
         {
-            throw new NotImplementedException();
+            var response = new PaymentProcessed();
+
+            // Do some stuff
+            Thread.Sleep(5000);
+
+            await context.Reply(response);
         }
     }
 }

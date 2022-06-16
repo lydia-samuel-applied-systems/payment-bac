@@ -10,6 +10,6 @@ namespace payment_bac.domain.messages
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }
         public string SortCode { get; set; }
-        public double Amount;
+        public double Amount { get; set; }
     }
 }

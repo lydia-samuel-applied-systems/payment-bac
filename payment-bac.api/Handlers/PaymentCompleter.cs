@@ -11,12 +11,12 @@ namespace payment_bac.api.Handlers
 
         public PaymentCompleter(IRepository repository)
         {
-            // TODO: possibly this will not be injected as NSB might instantiate it before the injector
             _repository = repository;
         }
 
         public Task Handle(PaymentFinished message, IMessageHandlerContext context)
         {
+            _repository.PayTowardsPolicy(message.SessionId, message.Amount);
             _repository.MarkSessionAsComplete(message.SessionId);
 
             return Task.CompletedTask;

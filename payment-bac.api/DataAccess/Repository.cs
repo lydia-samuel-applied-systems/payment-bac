@@ -12,6 +12,8 @@ namespace payment_bac.api.DataAccess
 
         public Policy GetPolicy(string SessionId);
 
+        public void PayTowardsPolicy(string SessionId, double Amount);
+
         public void MarkSessionAsComplete(string SessionId);
     }
 
@@ -43,9 +45,30 @@ namespace payment_bac.api.DataAccess
             return policy;
         }
 
+        public void PayTowardsPolicy(string SessionId, double Amount)
+        {
+            var current = _context.Sessions
+                .Where(x => x.ID.Equals(SessionId))
+                .Include(x => x.Policy)
+                .First();
+
+            var policy = current.Policy;
+
+            policy.AmountPaid += Amount;
+
+            _context.SaveChanges();
+        }
+
         public void MarkSessionAsComplete(string SessionId)
         {
+            var current = _context.Sessions
+                .Where(x => x.ID.Equals(SessionId))
+                .Include(x => x.Policy)
+                .First();
 
+            current.IsComplete = true;
+
+            _context.SaveChanges();
         }
     }
 }

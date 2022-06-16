@@ -25,6 +25,7 @@ builder.Host.UseNServiceBus(context =>
 {
     var endpointName = "payment-bac.api";
     var endpointConfiguration = new EndpointConfiguration(endpointName);
+    endpointConfiguration.EnableInstallers();
 
     var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
     persistence.SqlDialect<SqlDialect.MsSqlServer>();
@@ -37,8 +38,6 @@ builder.Host.UseNServiceBus(context =>
         .UseTransport<RabbitMQTransport>()
         .ConnectionString(rabbitConnectionString)
         .UseConventionalRoutingTopology();
-
-    transport.Routing().RouteToEndpoint(typeof(PaymentFinished), endpointName);
 
     return endpointConfiguration;
 });
@@ -60,16 +59,13 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    // app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

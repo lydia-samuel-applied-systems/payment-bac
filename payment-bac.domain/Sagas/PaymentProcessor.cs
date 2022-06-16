@@ -7,14 +7,14 @@ namespace payment_bac.domain.Sagas
     public class PaymentProcessor : 
         Saga<PaymentProcessingData>,
         IAmStartedByMessages<PaymentStarted>,
+        IHandleMessages<PaymentProcessed>,
         IHandleTimeouts<PaymentEscalation>
     {
         public async Task Handle(PaymentStarted message, IMessageHandlerContext context)
         {
             Data.PolicyId = message.PolicyId;
-            Data.Amount = message.PolicyId;
-
-            // Send message to ACL to talk to AppliedBank
+            Data.Amount = message.Amount;
+            
             var bankPayment = new ProcessBankPayment()
             {
                 AccountName = message.AccountName,
@@ -25,26 +25,37 @@ namespace payment_bac.domain.Sagas
 
             await context.Send(bankPayment);
 
-            // Start timeout for response back from ACL
+            await RequestTimeout(context, TimeSpan.FromMinutes(5), new PaymentEscalation());
+        }
 
-            await RequestTimeout(context, TimeSpan.FromSeconds(20), new PaymentEscalation());
-
-            // TODO: implement receive code
-
-            // If it doesn't timeout send a message back to the PaymentCompleter in the API
-
+        public async Task Handle(PaymentProcessed message, IMessageHandlerContext context)
+        {
             var finishPayment = new PaymentFinished()
             {
                 SessionId = Data.SessionId,
+                Amount = Data.Amount,
+                Success = true,
                 PolicyId = Data.PolicyId
             };
 
             await context.Send(finishPayment);
+
+            MarkAsComplete();
         }
 
-        public Task Timeout(PaymentEscalation state, IMessageHandlerContext context)
+        public async Task Timeout(PaymentEscalation state, IMessageHandlerContext context)
         {
-            throw new NotImplementedException();
+            var finishPayment = new PaymentFinished()
+            {
+                SessionId = Data.SessionId,
+                Amount = 0.0,
+                Success = false,
+                PolicyId = Data.PolicyId
+            };
+
+            await context.Send(finishPayment);
+
+            MarkAsComplete();
         }
 
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<PaymentProcessingData> mapper)
