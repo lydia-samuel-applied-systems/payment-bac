@@ -17,6 +17,18 @@ builder.Services
     .AddControllers()
     .AddNewtonsoftJson();
 
+// Allow CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:44468")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddDbContext<Context>(options => 
     options.UseSqlServer(sqlConnectionString));
 
@@ -61,6 +73,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 

@@ -9,5 +9,6 @@ namespace payment_bac.acl.messages
 {
     public class PaymentProcessed : IMessage
     {
+        public bool Success { get; set; }
     }
 }

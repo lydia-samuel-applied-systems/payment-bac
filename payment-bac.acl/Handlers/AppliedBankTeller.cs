@@ -7,7 +7,10 @@ namespace payment_bac.acl.Handlers
     {
         public async Task Handle(ProcessBankPayment message, IMessageHandlerContext context)
         {
-            var response = new PaymentProcessed();
+            var response = new PaymentProcessed()
+            {
+                Success = true,
+            };
 
             // Do some stuff
             Thread.Sleep(5000);

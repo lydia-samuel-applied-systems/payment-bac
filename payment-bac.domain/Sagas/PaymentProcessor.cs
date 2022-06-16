@@ -30,15 +30,30 @@ namespace payment_bac.domain.Sagas
 
         public async Task Handle(PaymentProcessed message, IMessageHandlerContext context)
         {
-            var finishPayment = new PaymentFinished()
+            if (message.Success)
             {
-                SessionId = Data.SessionId,
-                Amount = Data.Amount,
-                Success = true,
-                PolicyId = Data.PolicyId
-            };
+                var finishPayment = new PaymentFinished()
+                {
+                    SessionId = Data.SessionId,
+                    Amount = Data.Amount,
+                    Success = true,
+                    PolicyId = Data.PolicyId
+                };
 
-            await context.Send(finishPayment);
+                await context.Send(finishPayment);
+            }
+            else
+            {
+                var finishPayment = new PaymentFinished()
+                {
+                    SessionId = Data.SessionId,
+                    Amount = 0.0,
+                    Success = false,
+                    PolicyId = Data.PolicyId
+                };
+
+                await context.Send(finishPayment);
+            }
 
             MarkAsComplete();
         }
