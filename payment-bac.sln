@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "payment-bac.api", "payment-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "payment-bac.domain", "payment-bac.domain\payment-bac.domain.csproj", "{9626EBFF-0AC9-4FA6-AB56-35C6622834A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "payment-bac.domain.messages", "payment-bac.domain.messages\payment-bac.domain.messages.csproj", "{9557DAC5-572A-40C9-8F76-807F024BFC2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "payment-bac.domain.messages", "payment-bac.domain.messages\payment-bac.domain.messages.csproj", "{9557DAC5-572A-40C9-8F76-807F024BFC2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "payment-bac.acl.messages", "payment-bac.acl.messages\payment-bac.acl.messages.csproj", "{745BA288-82E4-4C07-B192-17B457605950}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "payment-bac.acl.messages", "payment-bac.acl.messages\payment-bac.acl.messages.csproj", "{745BA288-82E4-4C07-B192-17B457605950}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "payment-bac.api.UnitTests", "payment-bac.api.UnitTests\payment-bac.api.UnitTests.csproj", "{DB88D62D-7A66-4308-82E7-37F546B70383}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{745BA288-82E4-4C07-B192-17B457605950}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{745BA288-82E4-4C07-B192-17B457605950}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{745BA288-82E4-4C07-B192-17B457605950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB88D62D-7A66-4308-82E7-37F546B70383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB88D62D-7A66-4308-82E7-37F546B70383}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB88D62D-7A66-4308-82E7-37F546B70383}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB88D62D-7A66-4308-82E7-37F546B70383}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
